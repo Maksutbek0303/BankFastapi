@@ -8,6 +8,12 @@ setup_app = FastAPI()
 model = joblib.load('log_model.pkl')
 scaler = joblib.load('scaler (3).pkl')
 
+gender_list = ['male', 'female']
+education_list = ['Bachelor', 'Doctorate', 'High School', 'Master']
+ownership_list = ['OTHER', 'OWN', 'RENT', 'MORTGAGE']
+loan_intent_list = ['EDUCATION', 'HOMEIMPROVEMENT', 'MEDICAL', 'PERSONAL', 'VENTURE']
+
+
 class BankSchema(BaseModel):
     person_age: float
     person_gender: str
@@ -30,31 +36,22 @@ async def predict(bank: BankSchema):
 
     person_gender = bank_dict.pop('person_gender')
     person_gender_1_0 = [
-        1 if person_gender == 'male' else 0,
+        1 if person_gender == i else 0 for i in gender_list
     ]
 
     person_education = bank_dict.pop('person_education')
     person_education_1_0 = [
-        1 if person_education == 'Bachelor' else 0,
-        1 if person_education == 'Doctorate' else 0,
-        1 if person_education == 'High School' else 0,
-        1 if person_education == 'Master' else 0,
+        1 if person_education == i else 0 for i in education_list
     ]
 
     person_home_ownership = bank_dict.pop('person_home_ownership')
     person_home_1_0 = [
-        1 if person_home_ownership == 'OTHER' else 0,
-        1 if person_home_ownership == 'OWN' else 0,
-        1 if person_home_ownership == 'RENT' else 0,
+        1 if person_home_ownership == i else 0 for i in ownership_list
     ]
 
     loan_intent = bank_dict.pop('loan_intent')
     loan_intent_1_0 = [
-        1 if loan_intent == 'EDUCATION' else 0,
-        1 if loan_intent == 'HOMEIMPROVEMENT' else 0,
-        1 if loan_intent == 'MEDICAL' else 0,
-        1 if loan_intent == 'PERSONAL' else 0,
-        1 if loan_intent == 'VENTURE' else 0,
+        1 if loan_intent == i else 0 for i in loan_intent_list
 
     ]
 
